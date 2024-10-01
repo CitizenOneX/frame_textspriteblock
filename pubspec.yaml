@@ -10,7 +10,10 @@ dependencies:
   flutter:
     sdk: flutter
   flutter_blue_plus: ^1.32.12
+  image: ^4.2.0
   logging: ^1.2.0
+  simple_frame_app:
+    path: ../simple_frame_app
 
 dev_dependencies:
   flutter_test:
@@ -19,3 +22,10 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+  assets:
+    - packages/simple_frame_app/lua/battery.min.lua
+    - packages/simple_frame_app/lua/code.min.lua
+    - packages/simple_frame_app/lua/data.min.lua
+    - packages/simple_frame_app/lua/sprite.min.lua
+    - assets/frame_app.lua
+    - assets/spritefonts/unifont.zip
