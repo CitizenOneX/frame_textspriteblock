@@ -1,5 +1,7 @@
 local data = require('data.min')
 local battery = require('battery.min')
+local sprite = require('sprite.min')
+local code = require('code.min')
 
 -- Phone to Frame flags
 -- TODO sample messages only

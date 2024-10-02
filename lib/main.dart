@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_blue_plus/flutter_blue_plus.dart';
-import 'package:image/image.dart' as img;
 import 'package:logging/logging.dart';
 import 'package:simple_frame_app/simple_frame_app.dart';
 import 'package:simple_frame_app/tx/text_sprite.dart';
@@ -37,26 +35,21 @@ class MainAppState extends State<MainApp> with SimpleFrameAppState {
     if (mounted) setState(() {});
 
     try {
-        // load the sprite font
-        // Note: loading .fnt file and .png file separately seems to hit a bug, but if it's all zipped up together then it works ok
-        AssetBundle bundle = DefaultAssetBundle.of(context);
-        final font = img.BitmapFont.fromZip((await bundle.load('assets/spritefonts/unifont.zip')).buffer.asInt8List());
-
         // some sample text
-        // note: Right-to-left script (Arabic, Hebrew) is not rendered correctly by TxTextSpriteBlock yet
         String inputString = 'Hello, friend!\nمرحبا يا صديق\nこんにちは、友人！\n朋友你好！\nПривет, друг!\nשלום, חבר\n안녕, 친구!';
 
         // TODO do I really want to specify displayRows? I just render and send all the lines - let the frame_app decide how many to render
         // TODO I still want to have phoneside pagination though, so maybe both need to be solved together (for PlainText as well as TextSprites)
-        var tsb = TxTextSpriteBlock(msgCode: 0x10, width: 640, lineHeight: 16, displayRows: 3, font: font, text: inputString);
+        var tsb = TxTextSpriteBlock(msgCode: 0x20, width: 640, lineHeight: 32, displayRows: 3, fontFamily: null, text: inputString);
+        await tsb.rasterize();
 
         // for preview only, make a full-sized image made up of all the lines composited
-        // into one large image
-        // add the textspriteblock we made to the _images widget list for display
+        // into one large image and add it to the _images widget list for display
         _images.clear();
-        _images.add(Image.memory(img.encodePng(tsb.toImage())));
+        _images.add(Image.memory(await tsb.toPngBytes()));
 
         // TODO send (some of) the TxTextSpriteLines to Frame for display
+        frame!.sendMessage(tsb.lines[6]);
 
         currentState = ApplicationState.ready;
         if (mounted) setState(() {});
