@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:logging/logging.dart';
 import 'package:simple_frame_app/simple_frame_app.dart';
-import 'package:simple_frame_app/tx/text_sprite.dart';
+import 'package:simple_frame_app/tx/text_sprite_block.dart';
 
 
 void main() => runApp(const MainApp());
@@ -40,7 +40,7 @@ class MainAppState extends State<MainApp> with SimpleFrameAppState {
 
         // TODO do I really want to specify displayRows? I just render and send all the lines - let the frame_app decide how many to render
         // TODO I still want to have phoneside pagination though, so maybe both need to be solved together (for PlainText as well as TextSprites)
-        var tsb = TxTextSpriteBlock(msgCode: 0x20, width: 640, lineHeight: 32, displayRows: 3, fontFamily: null, text: inputString);
+        var tsb = TxTextSpriteBlock(msgCode: 0x20, width: 640, fontSize: 32, displayRows: 3, fontFamily: null, text: inputString);
         await tsb.rasterize();
 
         // for preview only, make a full-sized image made up of all the lines composited
@@ -48,8 +48,16 @@ class MainAppState extends State<MainApp> with SimpleFrameAppState {
         _images.clear();
         _images.add(Image.memory(await tsb.toPngBytes()));
 
-        // TODO send (some of) the TxTextSpriteLines to Frame for display
-        frame!.sendMessage(tsb.lines[6]);
+        // send the TxTextSpriteLines to Frame for display
+        // block header first
+        await frame!.sendMessage(tsb);
+
+        // send over the lines one by one
+        // note that the sprites have the same message code, so they need to be handled by the text_sprite_block parser
+        for (var line in tsb.lines) {
+          await frame!.sendMessage(line);
+        }
+
 
         currentState = ApplicationState.ready;
         if (mounted) setState(() {});
