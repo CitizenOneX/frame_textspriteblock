@@ -30,7 +30,7 @@ function app_loop()
 				-- show the text sprite block
 				local tsb = data.app_data[TEXT_SPRITE_BLOCK]
 				for index, spr in ipairs(tsb.sprites) do
-					frame.display.bitmap(1, tsb.offsets[index].y + 1, spr.width, 2^spr.bpp, 0, spr.pixel_data)
+					frame.display.bitmap(1, tsb.offsets[index].y + 1, spr.width, 2^spr.bpp, 0+index, spr.pixel_data)
 				end
 				frame.display.show()
 

@@ -38,7 +38,7 @@ class MainAppState extends State<MainApp> with SimpleFrameAppState {
         // some sample text
         String inputString = 'Hello, friend!\nمرحبا يا صديق\nこんにちは、友人！\n朋友你好！\nПривет, друг!\nשלום, חבר\n안녕, 친구!';
 
-        // TODO do I really want to specify displayRows? I just render and send all the lines - let the frame_app decide how many to render
+        // TODO do I really want to specify displayRows (currently ignored)? I just render and send all the lines - let the frame_app decide how many to render
         // TODO I still want to have phoneside pagination though, so maybe both need to be solved together (for PlainText as well as TextSprites)
         var tsb = TxTextSpriteBlock(msgCode: 0x20, width: 640, fontSize: 32, displayRows: 3, fontFamily: null, text: inputString);
         await tsb.rasterize();
@@ -71,8 +71,6 @@ class MainAppState extends State<MainApp> with SimpleFrameAppState {
 
   @override
   Future<void> cancel() async {
-    // TODO any logic while canceling?
-
     currentState = ApplicationState.ready;
     if (mounted) setState(() {});
   }
@@ -93,7 +91,8 @@ class MainAppState extends State<MainApp> with SimpleFrameAppState {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              ElevatedButton(onPressed: run, child: const Text('Run')),
+              //only used when Frame is not available during testing
+              //ElevatedButton(onPressed: run, child: const Text('Run')),
               ..._images,
             ],
           ),
