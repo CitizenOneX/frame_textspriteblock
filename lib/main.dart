@@ -48,7 +48,7 @@ class MainAppState extends State<MainApp> with SimpleFrameAppState {
         _images.clear();
         _images.add(Image.memory(await tsb.toPngBytes()));
 
-        // send the TxTextSpriteLines to Frame for display
+        // send the TxTextSpriteBlock lines to Frame for display
         // block header first
         await frame!.sendMessage(tsb);
 
