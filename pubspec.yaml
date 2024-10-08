@@ -12,7 +12,7 @@ dependencies:
   flutter_blue_plus: ^1.32.12
   image: ^4.2.0
   logging: ^1.2.0
-  simple_frame_app: ^0.0.6
+  simple_frame_app: ^0.0.7
 
 dev_dependencies:
   flutter_test:
